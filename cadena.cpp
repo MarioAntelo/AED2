@@ -26,7 +26,10 @@ CADENA::CADENA(string str, int size_sub, char c){
 		size++;
 	}
 }
-
+/*
+ * Metodo almacena un caracter en el array
+ * recibe un caracter
+*/
 void CADENA::push_back(char c) { 
 	cad.push_back(c);
 	size++;
@@ -48,19 +51,21 @@ void CADENA::print(){
 }
 
 /*
- * Metodo que dado un indice comprueba
- * cuantas veces aparece el caracter dentro una
- * subcadena de tamaño m.
- * devuelve el tamaño.
+ * Metodo que comprueba las apariciones de un Caracter
+ * Recibe: indices de la inicio y final de la subcadena a tratar
+ * devuelve el max de apariciones concecutivas del caracter.
  */
-int CADENA::comprobar_Subcad(int indice){
-	int i, tam, max;
-	i = indice;
+int CADENA::comprobar_Subcad(int inicio, int final){
+	int i, max, aux;
+	i = inicio;
 	max=0;
-	tam = indice+ size_subcad;
-	for (; i < tam ; i++){
-		if (cad[i] == caracter){
-			max++;	
+	for (; i < final ; i++){
+		if (cad[i] == caracter)
+			aux++;	
+		else{
+			if(aux >= max)
+				max = aux;
+			aux=0;
 		}
 	}
 	return max;

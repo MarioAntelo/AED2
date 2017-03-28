@@ -31,7 +31,7 @@ class CADENA {
 		char getCaracter(){return caracter;};
 
 		//metodo comprueba la apariciones del caracter
-		int comprobar_Subcad(int indice);
+		int comprobar_Subcad(int inicio, int final);
 
 };
 
