@@ -2,6 +2,9 @@
 
 using namespace std;
 
+/*prueba*/
+
+
 /**
  * Método de construcción de la cadena a recorrer.
  * Recibe un string que recorrerá carácter
