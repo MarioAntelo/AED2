@@ -15,4 +15,13 @@ RES dvd_subcad(CADENA cad, int inicio, int final){
 		dvd_subcad(....);
 		dvd_combinar(.....);
 	}
+
+	/* Opción de dividir, para poder partir las cadenas, lo he puesto así porque no me acordaba de que es dvd_subcad
+	
+	int dividir (int primera_cadena, int segunda_cadena){
+		int aux = segunda_cadena - primera_cadena +1;
+		int subcadena = ((primera_cadena + (aux/2)) + (aux/2) -1)
+	}
+
+	*/
 }
