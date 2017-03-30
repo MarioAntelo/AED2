@@ -2,13 +2,16 @@
 #define __FUNC
 
 #include "cadena.h"
-struct RES
-{
+typedef struct {
 	int max;
 	int indice;
-};
+}solucion;
 
-RES dvd_subcad(CADENA cad, int inicio, int final);
-//RES dvd_combinar(CADENA cad, RES subcad1, RES subcad2);
+solucion dvd_subcad(CADENA , int, int );
+solucion dvd_combinar(CADENA , solucion, solucion);
+
+//metodos auxiliares
+int dividir(int);
+int tam_cad(int,int);
 
 #endif

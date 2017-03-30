@@ -1,4 +1,5 @@
 #include "cadena.h"
+#include "func.h"
 
 using namespace std;
 
@@ -17,6 +18,10 @@ int main(int argc, const char* argv[]){
 	CADENA cadena(str_cad, tam_subcad, caracter);
 
 	cadena.print();
+
+	solucion res;
+	res = dvd_subcad(cadena, 0, cadena.getSize()-1);
 	
+	cout << res.max << " --- " << res.indice<< endl;
 	return 0;
 }

@@ -1,5 +1,5 @@
 CXX		= g++
-TARGETS = cadena.o
+TARGETS = cadena.o func.o
 
 all: principal 
 
