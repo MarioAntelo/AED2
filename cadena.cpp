@@ -61,7 +61,7 @@ int CADENA::comprobar_Subcad(int inicio, int final){
 	max=0;
 	aux =0;
 	for (; i <= final ; i++){
-		if (cad[i] == caracter)
+		if (comprobar_caracter(cad[i]))
 			aux++;
 		else
 			aux=0;
@@ -70,4 +70,16 @@ int CADENA::comprobar_Subcad(int inicio, int final){
 				max = aux;
 	}
 	return max;
+}
+
+/*
+ * Metodo que comprueba si es el caracter buscado
+ * Recibe: indices de la inicio y final de la subcadena a tratar
+ * devuelve el max de apariciones concecutivas del caracter.
+ */
+bool CADENA::comprobar_caracter(int indice){
+		if (cad[indice] == caracter)
+			return true;
+		else
+			return false;
 }

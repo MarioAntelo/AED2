@@ -4,7 +4,8 @@
 #include "cadena.h"
 typedef struct {
 	int max;
-	int indice;
+	int inicio;
+	int final
 }solucion;
 
 solucion dvd_subcad(CADENA , int, int );

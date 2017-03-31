@@ -32,6 +32,7 @@ class CADENA {
 
 		//metodo comprueba la apariciones del caracter
 		int comprobar_Subcad(int inicio, int final);
+		bool comprobar_caracter(int indice);
 
 };
 
