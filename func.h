@@ -5,14 +5,14 @@
 typedef struct {
 	int max;
 	int inicio;
-	int final
+	int final;
 }solucion;
 
 solucion dvd_subcad(CADENA , int, int );
 solucion dvd_combinar(CADENA , solucion, solucion);
 
 //metodos auxiliares
-int dividir(int);
+int dividir(int,int);
 int tam_cad(int,int);
 
 #endif

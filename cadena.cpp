@@ -61,7 +61,7 @@ int CADENA::comprobar_Subcad(int inicio, int final){
 	max=0;
 	aux =0;
 	for (; i <= final ; i++){
-		if (comprobar_caracter(cad[i]))
+		if (comprobar_caracter(i))
 			aux++;
 		else
 			aux=0;

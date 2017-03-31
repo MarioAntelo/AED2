@@ -22,6 +22,6 @@ int main(int argc, const char* argv[]){
 	solucion res;
 	res = dvd_subcad(cadena, 0, cadena.getSize()-1);
 	
-	cout << res.max << " --- " << res.indice<< endl;
+	cout << res.max << " --- " << res.inicio+1 << " --- " << res.final+1  << endl;
 	return 0;
 }
