@@ -6,6 +6,7 @@ typedef struct {
 	int max;
 	int inicio;
 	int final;
+	int ini_subcad;
 }solucion;
 
 solucion dvd_subcad(CADENA , int, int );
