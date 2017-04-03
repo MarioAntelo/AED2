@@ -5,25 +5,37 @@
 
 using namespace std;
 
-struct solucion{
-	int inicio;
-	int final;
-};
-
-bool isCaracter(char c){
-	if(c == 'a' || c == 'b' || c == 'c' || c == 'd' || c == 'e' || c == 'f' || c == 'g' || c == 'h' 
-		|| c == 'i' || c == 'j' || c == 'k' || c == 'l' || c == 'm' || c == 'n' || c == 'o' || c == 'p' 
-		|| c == 'q' || c == 'r' || c == 's' || c == 't' || c == 'u' || c == 'v' || c == 'w' || c == 'x' 
-		|| c == 'y' || c == 'z' ) return true;
-     return false;
-}
+string a, b; 
+int m;
+int main(int argc, char*argv[]){
 
 
-solucion dvdIter(char* caracter){
-	solucion s;
-	s.inicio = 0;
-	s.final = 0;
-	int origenSubcadena=0;
-	int finalSubcadena=0;
+	string txt;
+	txt = argv[1];
+	ifstream fichero;
+	fichero.open (txt.c_str());
+	int num_casos;
+	fichero >> num_casos;
+	for (int i = 0; i < num_casos; i++){
+		fichero >> m; fichero >> a; fichero >> b;
+		int posMax=-1;
+		int valorMax=-1;
+		int origen=0;
+		int valorActual;
+		while(origen+m <= a.length()){
+			for (int j = 0; j < m; ++j ){
+				valorActual+=abs(int(a[origen+j]) -int(b[origen+j]));
+			}
+
+			if (valorActual > valorMax){
+				posMax=origen;
+				valorMax=valorActual;
+			}
+
+			origen++;
+
+		}
+		cout << posMax << " " << valorMax << endl;
+	}
 
 }
