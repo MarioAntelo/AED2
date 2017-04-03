@@ -50,13 +50,13 @@ solucion dvd_combinar(CADENA cad, solucion s1, solucion s2){
 	if (s1.max <= s2.max){
 		s3.max = s2.max;
 		
-		if(s3.max < caso_base){
+		if(tam_cad(s2.inicio, s2.final) <= caso_base){
 			s3.ini_subcad = s2.inicio;
 		}
 	}else if (s1.max > s2.max){
 		s3.max = s1.max;
 
-		if(s3.max < caso_base){
+		if(tam_cad(s1.inicio, s1.final) <= caso_base){
 			s3.ini_subcad = s1.inicio;
 			//s3.ini_subcad = s1.final - (caso_base-1);
 		}
