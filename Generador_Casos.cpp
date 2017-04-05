@@ -1,3 +1,10 @@
+/*Generador de Prueba
+Tamaño de la cadena N
+Tamaño de la subcadena m
+Carácter buscado c
+*/
+
+
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -8,27 +15,19 @@ static const char alfabeto[] = "abcdefghijklmnopqrstuvwxyz";
 
 int stringLength = sizeof(alfabeto) - 1;
 
-char genRandom()
-{
+char genRandom(){
 
-    return alfabeto[rand() % stringLength];
+	return alfabeto[rand() % stringLength];
 }
 
-int main()
-{
-    srand(time(0));
-    std::string Str;
-    for(unsigned int i = 0; i < 20; ++i)
-    {
-    Str += genRandom();
+int main(){
+	srand(time(0));
+	std::string Str;
+	for(unsigned int i = 0; i < 20; ++i){
+		Str += genRandom();
 
     }
     cout << Str << endl;
-    
-
-
 }
 
     return 0;
-
-}
