@@ -21,11 +21,11 @@ solucion dvd_subcad(CADENA cad, int inicio, int final){
 		solucion s1,s2, s3;
 		s1 = dvd_subcad(cad, inicio, mitad);
 		s2 = dvd_subcad(cad, mitad+1, final);
-		cout << s1.max <<"-" << s1.inicio<<"-" << s1.final<<"--" << s1.ini_subcad<< endl; 
-		cout << s2.max <<"-" << s2.inicio<<"-" << s2.final<<"--" << s2.ini_subcad <<endl;
+		//cout << s1.max <<"-" << s1.inicio<<"-" << s1.final<<"--" << s1.ini_subcad<< endl; 
+		//cout << s2.max <<"-" << s2.inicio<<"-" << s2.final<<"--" << s2.ini_subcad <<endl;
 		s3 = dvd_combinar(cad, s1, s2);
 
-		cout << s3.max <<"-" << s3.inicio<<"-" << s3.final<<"--" << s3.ini_subcad<< endl;
+		//cout << s3.max <<"-" << s3.inicio<<"-" << s3.final<<"--" << s3.ini_subcad<< endl;
 		return s3;
 	}
 }

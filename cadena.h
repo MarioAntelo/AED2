@@ -34,6 +34,8 @@ class CADENA {
 		int comprobar_Subcad(int inicio, int final);
 		bool comprobar_caracter(int indice);
 
+		void set_subcad(int subcad){size_subcad = subcad;};
+
 };
 
 #endif
