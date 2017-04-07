@@ -2,12 +2,21 @@
 
 using namespace std;
 
+/**
+ * Método de recursivo del DyV
+ * Recibe un objeto de tipo Cadena, posicion inicial de la cadea
+ * posicion final de la cadena
+ * devuelve una estructura con la solucion.
+ */
 solucion dvd_subcad(CADENA cad, int inicio, int final){
 	int caso_base, mitad;
 
 	//caso base
 	caso_base = cad.getSize_Subcad();
 	int tam = tam_cad(inicio,final);
+	//si la subcadena es menor o igual al caso base
+	// entonces se comprueba la cantidad de apariciones conjuntas 
+	// del caracter 
 	if( tam <= caso_base){
 		solucion s;
 		s.max = cad.comprobar_Subcad(inicio, final);
@@ -19,19 +28,18 @@ solucion dvd_subcad(CADENA cad, int inicio, int final){
 	else{
 		int mitad = dividir(inicio,final);
 		solucion s1,s2, s3;
+		//dividimos el problema en 2 subproblemas.
 		s1 = dvd_subcad(cad, inicio, mitad);
 		s2 = dvd_subcad(cad, mitad+1, final);
-		//cout << s1.max <<"-" << s1.inicio<<"-" << s1.final<<"--" << s1.ini_subcad<< endl; 
-		//cout << s2.max <<"-" << s2.inicio<<"-" << s2.final<<"--" << s2.ini_subcad <<endl;
+		// combinamos el resultados de los dos subproblemas.
 		s3 = dvd_combinar(cad, s1, s2);
-
-		//cout << s3.max <<"-" << s3.inicio<<"-" << s3.final<<"--" << s3.ini_subcad<< endl;
 		return s3;
 	}
 }
 
-/* metodo para el indice de la mitad
- * le pasamos el indice final y devuelve el de la mitad
+/* metodo para sacar la posicion media de la cadena
+ * le pasamos el indice final 
+ * Devuelve la posicion media 
 */
 int dividir (int inicio, int final){
 	int aux =0;
@@ -47,6 +55,10 @@ int tam_cad(int inicio, int final){
 	return (final - inicio) + 1;
 }
 
+/* metodo Combinar
+ * metodo combina resultados entre 2 subcadenas
+ * Devuelve el resultado de combinar las dos cadenas
+*/
 solucion dvd_combinar(CADENA cad, solucion s1, solucion s2){
 
 	solucion s3;
@@ -70,7 +82,8 @@ solucion dvd_combinar(CADENA cad, solucion s1, solucion s2){
 	s3.inicio = s1.inicio;
 	s3.final = s2.final;
 
-	//si hemos encontrado una cadena de apariciones no se recorre el centro de la cadena.
+	//si hemos encontrado una cadena de apariciones igual al caso base
+	// no se recorre el centro de la cadena.
 	if(s3.max < caso_base){
 		int aux =0;
 		int indice =0;
