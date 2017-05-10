@@ -144,3 +144,21 @@ void ImprimirSolucion(){
 
 		for
 }
+
+
+
+int main(void){
+	int numeroCasos;
+	cin >> numeroCasos;
+	while(numeroCasos > 0){
+
+		reiniciarVariables();
+		cin >> numAlumnos;
+		setVariable(numAlumnos);
+		voraz();
+
+		numeroCasos--;
+	}
+
+	return 0;
+}
