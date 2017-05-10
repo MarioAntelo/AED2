@@ -135,6 +135,8 @@ void posible(int alumno){
 
 }
 
+//////Falta imprimir la solución como lo pide el problema
+
 void ImprimirSolucion(){
 
 		bool elegidos[numAlumnos];
@@ -143,6 +145,20 @@ void ImprimirSolucion(){
 		cout << Beneficio << endl;
 
 		for
+}
+
+void voraz(){
+	while(alumnoSolo != 0 ){
+		int alumno = seleccionar();
+
+		C[alumno] = true;
+		alumnoSolo--;
+
+		posible(alumno);
+		indiceSolucion++;
+	}
+	ImprimirSolucion();
+
 }
 
 
