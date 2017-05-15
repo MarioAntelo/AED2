@@ -51,17 +51,23 @@ class Simbolo
 * genera los hermanos o el primero para el nivel actual.
 */
 void generar(int nivel, vector<int> &s){
-	int valor = s[nivel-1];
+	cout << "genera" << endl;
+	int valor, mec;
+	valor= s[nivel-1];
 	//genera el nodo de la izquierda
 	if (valor==-1){
 		s[nivel-1]=0;
+		cout << "entra" << endl;
 
 	}
-	//genera el nodo de la derecha
+	//genera con un mecanico 
 	else if(valor==0){
+		valor = seleccionMecanico(mecanicos,  nivel-1, asig);
+	//si ningun mecanico tiene la capacidad para reparar la averia.
+	s.at(nivel-1) = valor;
 		s[nivel-1]=1;
 	}
-	
+	cout << "sale" << endl;
 }
 
 /*

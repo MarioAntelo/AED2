@@ -25,50 +25,47 @@ class Mecanico{
 			cout << endl;
 		};
 
-		void setCapacidad(vector<int> cap){
-			int size = cap.size();
-			for (int i=0 ; i < size; i++){
-				if(cap[i]==0)
-    					capacidad[i] = 0;
-    			else if (cap[i]==-1)
-    				i=size;
-    			
-    		}
-		}
-
-		bool igual(Mecanico aux){
-			int size = capacidad.size();
-			for (int i=0 ; i < size; ++i){
-				if(capacidad[i] != aux.getCapacidad(i))
-					return false;
-			}
-			return true;
-		};
+		
 };
+
+int seleccionMecanico(vector<Mecanico> mec, int Averia, vector<int> asignados){
+	for (int i=0; i < mec.size(); i++)
+    	if(mec.at(i).getCapacidad(Averia)==1)
+    		if(asignados[i] == 0)
+				return i;
+    return 0;
+}
 
 /*
 * Función que realiza la generación de los nodos
-* genera los hermanos o el primero para el nivel actual.
+* generara un nuevo nodo dependiendo de la capacidad de los mecanicos
 */
 void generar(int nivel, vector<int> &s){
+	/*int valor = -1;
+	
+	valor = seleccionMecanico(mecanicos,  nivel-1, asig);
+	//si ningun mecanico tiene la capacidad para reparar la averia.
+	s.at(nivel-1) = valor;
+
 	int valor = s[nivel-1];
-	//genera el nodo de la izquierda
+	*genera el nodo de la izquierda
+	*/esa averia no se asignaria
 	if (valor==-1){
 		s[nivel-1]=0;
 
 	}
 	//genera el nodo de la derecha
+	//donde se asigna a un tecnico
 	else if(valor==0){
-		s[nivel-1]=1;
+		s[nivel-1]+=1;
 	}
-	
 }
 
 /*
  Función que realiza el retroceso de un nivel una vez que se haya comprobado
  que no hayan más nodos que se puedan explorar en el nivel que recibe como 
  parámetro.
-/
+*/
 void retroceder(int &nivel, vector<int> &s){
 	// Pone el contenido del vector a -1 y retrocede un nivel
 	s[nivel-1]=-1;
@@ -76,75 +73,50 @@ void retroceder(int &nivel, vector<int> &s){
 }
 /*
 * Funcion Valor
-* cuenta la cantidad de segmentos apagados de la solucion
-/
-int valor(vector<int> solucion)
+* cuenta la cantidad de mecanicos asignados
+*/
+int valor(vector<int> solucios[nivel]+=1;n, vector<Mecanico> mecanicos)
 {
 	vector<int>::iterator it = solucion.begin();
 	int sol=0;
 	for ( ; it != solucion.end(); ++it){
-    	if(*it == 0 )
+    	if(*it != -1 )
 			sol++;
     }
     return sol;
 }
 
-/*
-* Comprobar simbolos
-* compruebas todos los simbolos apagando los segmentos dañados de la solucion
-* si hay dos simbolos iguales entonces devuelve true
-* en caso contrario devuelve false
-/
 
-bool ComprobarSimbolos(vector<int> s, vector<Simbolo> simbolos){
-	vector<Simbolo>::iterator it, it2;
-	it = simbolos.begin();
-	bool result;
-
-	//modifico los simbolos apagando los segmentos que tiene la solucion
-	for ( ; it != simbolos.end(); ++it)
-		it->setSegmentos(s);
-
-	it= simbolos.begin();
-	//compruebo que todos los simbolos sean distintos.
-	for ( ; it != simbolos.end(); ++it){
-		it2 = it +1;
-		for ( ; it2 != simbolos.end(); ++it2){
-			result = it->igual(*it2);
-			if(result){
-				return true;
-			}
-		}
-
-    }
-    return false;
-}
 
 /*
-* Sera nodo solucion si es un nodo terminal 
-* y todos los simbolos son distintos con los segmentos 
-* de la solucion que esten apagados
-/
-bool solucion(int nivel, int nivelMax,vector<int> s, vector<Simbolo> simbolos ){
-	if ( (nivel >= nivelMax) && !ComprobarSimbolos(s, simbolos))
+ * Nodo sera solucion si es terminal
+ */
+
+bool solucion(int nivel, int nivelMax ){
+	if (nivel >= nivelMax)
 		return true;
 	return false;
 }
 
+bool puedeAsignar(vector<Mecanico> mec, int Averia, vector<int> asignados){
+	for (int i=0; i < mec.size(); i++)
+    	if(mec.at(i).getCapacidad(Averia)==1)
+    		if(asignados[i] == 1)
+				return true;
+    return false;
+}
 
 
 /*
 * lo que hace el criterio es comprobar si se puede
 * alcanzar una solucion valida desde s[1] hasta s[nivel]
 * sino descarta todos los descendientes actuales
-* si los primeros n/2 segmentos estan apagados se poda.
-/
+*/
 
-bool criterio(int nivel, int nivelMax,vector<int> s, vector<Simbolo> simbolos){
+bool criterio(int nivel, int nivelMax){
 	
-	//si los simbolos con los segmentos apagados son iguales entonces el criterio 
-	//devuelve un false ya que no consigue una posible solucion
-	if(ComprobarSimbolos(s, simbolos) || nivel == nivelMax)
+	//habra una solucion valida si la averia siguiente se puede asignar
+	if (nivel == nivelMax || !puedeAsignar(nivle+1))
 		return false;
 
 	return true;
@@ -152,15 +124,16 @@ bool criterio(int nivel, int nivelMax,vector<int> s, vector<Simbolo> simbolos){
 
 /*
 * Funcion masHermanos
-* comrpueba si existe mas nodos hermanos a generar
-/
+* comprueba si existe mas nodos hermanos a generar
+*/
 
 bool masHermanos(int nivel, vector<int> s){
-	int valor = s[nivel-1];
+	/*int valor = s[nivel-1];
 	if (valor == 0){
 		return true;
 	}
-	return false;
+	return false;*/
+	return s[nivel] < s.size();
 }
 
 /*
@@ -169,36 +142,44 @@ bool masHermanos(int nivel, vector<int> s){
 */
 int backtracking(vector<Mecanico> mecanicos, int nAverias){
 	//variable solucion que se inicializa a -1.
-	vector<int> S;
+	vector<int> S1;
+	vector<int> mec_asig;
 	S.assign(nAverias, -1);
+	mec_asig.assign(mecanicos.size(), 0);
 
 	int nivelMax = nAverias;
 	//nivel por el que va el algoritmo.
 	int nivel=1;
 	//estas variables son la que contienen la solucion optima.
 	int voa = 0;
-	vector<int> soa; 
+	vector<int> soa;
+	vector<int> mec_soa;
 
 	while (nivel > 0) {
 		//funcion que genera un nodo hijo
-		generar(nivel, S);
-		
+		generar(nivel, S, mecanicos, mec_asig);
 		//se comprueba si la varaible solucion es una solucion y si es mas optima que la que tenemos
-		if (solucion(nivel, nivelMax, S, mecanicos) && (valor(S) > voa))
+		if (solucion(nivel, nivelMax) && (valor(S) > voa))
 		{
+			cout << "Encontramos solucion"<<endl;
 			voa = valor(S);
 			soa = S;
 		}
 		//comprobamos si podemos llegar a una solucion a partir del nodo actual
-		else if (criterio(nivel,nivelMax ,S, mecanicos))
-			nivel++;			
+		else if (criterio(nivel,nivelMax)){
+			nivel++;
+			cout << valor;
+		}
 		else {
 			//se comprueba si existe mas hermanos.
 			while(!masHermanos(nivel, S) && nivel > 0)
 				retroceder(nivel, S);
 		}
 	}
-	S.print();
+	cout << endl << "solucion: ";
+	for (int i=0; i < S.size(); i++)
+		cout << S.at(i);
+	cout << endl;
 	//retorna los segmentos activos de la solucion.
 	return nivelMax-valor(soa);
 }
@@ -226,18 +207,17 @@ int main(int argc, char *argv[]){;
 		 		aux.addCapacidad(cap);
 		 	}
 		 	mecanicos.push_back(aux);
+		 	aux.print();
     	}
+
+
 		int sol;
-		/*sol = backtracking(simbolos, nSegmentos);
+		sol = backtracking(mecanicos, nAverias);
 		
 		cout << sol << endl;
-		*/
+		
 
-		vector<Mecanico>::iterator it = mecanicos.begin();
-			for ( ; it != mecanicos.end(); ++it)
-    				it->print();
-			cout << endl;
-
+		
 		c++;
 		
 	}
