@@ -1,4 +1,4 @@
-#include <stlib.h>
+#include <stdlib.h>
 #include <iostream>
 #include <sys/time.h>
 
@@ -8,19 +8,19 @@ using namespace std;
 
 //VARIABLES GLOBALES//
 
-struct Pupitre{
+struct pupitre{
 	int alumno;
 	int companero;
 	
 };
 
-Pupitre Solucion[Max_alumnos/2]
+pupitre Solucion[Max_alumnos/2];
 
 int alumnoSolo;  //ENTERO CONTENEDOR DE ALUMNOS NO SENTADOS
 int numAlumnos;  //ENTERO CONTENEDOR DEL NÚMERO DE ALUMNOS
 
 bool C[Max_alumnos];	//ARRAY CONTENEDOR DE POSIBLES ALUMNOS
-int companero;	//ARRAYA CONTENEDOR DEL COMPAÑERO DE CADA ALUMNO
+int companero[Max_alumnos];	//ARRAYA CONTENEDOR DEL COMPAÑERO DE CADA ALUMNO
 
 int Amistad[Max_alumnos][Max_alumnos];	//MATRIZ CONTENEDORA DE LOS VALORES DE AMISTAD 
 int Trabajo[Max_alumnos][Max_alumnos];	//MATRIZ CONTENEDORA DE LOS VALORES DE TRABAJO
@@ -37,7 +37,7 @@ void resetVariable(){
 	indiceSolucion = 0;
 	Beneficio = 0;
 
-	Pupitre p;
+	pupitre p;
 	p.alumno = 0;
 	p.companero = 0;
 	for(int i = 0; i < Max_alumnos/2; i++){
@@ -81,7 +81,7 @@ void setVariable(int numAlumnos){
 
 int seleccionar(){
 	int i = 0;
-	for (i = o; i < numAlumnos-1 && C[i] == true; i++)
+	for (i = 0; i < numAlumnos-1 && C[i] == true; i++){}
 		if(i == numAlumnos-1 && C[i] == true)i = -1;
 
 	return i;
@@ -124,7 +124,7 @@ void posible(int alumno){
 
 		C[mejorCompanero] = true;
 
-		Pupitre p;
+		pupitre p;
 		p.alumno = alumno;
 		p.companero = mejorCompanero;
 		Solucion[indiceSolucion] = p;
@@ -144,8 +144,31 @@ void ImprimirSolucion(){
 		int companero;
 		cout << Beneficio << endl;
 
-		for
+		for(int i = 0; i < numAlumnos/2-1; i++){
+			alumno = Solucion[i].alumno;
+			companero = Solucion[i].companero
+			elegidos[alumno] = true;
+            elegidos[companero] = true;
+            cout << alumno << " " << companero << " ";     
+     	}	     
+     	alumno = Solucion[numAlumnos/2-1].alumno;
+     	companero = Solucion[numAlumnos/2-1].companero;
+     	elegidos[alumno] = true;
+     	elegidos[companero] = true;
+     
+     	cout << alumno << " " << companero;
+     	if(numAlumnos%2 != 0){
+        	for(int i = 0; i < numAlumnos; i++){
+            	if(elegidos[i]!= true){
+                	cout << " " << i << endl;
+                    break;                   
+                }
+                                   
+			}              
+		}
+		else cout << endl;
 }
+
 
 void voraz(){
 	while(alumnoSolo != 0 ){
@@ -168,7 +191,7 @@ int main(void){
 	cin >> numeroCasos;
 	while(numeroCasos > 0){
 
-		reiniciarVariables();
+		resetVariable();
 		cin >> numAlumnos;
 		setVariable(numAlumnos);
 		voraz();
