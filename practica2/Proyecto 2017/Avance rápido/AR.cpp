@@ -20,7 +20,7 @@ int alumnoSolo;  //ENTERO CONTENEDOR DE ALUMNOS NO SENTADOS
 int numAlumnos;  //ENTERO CONTENEDOR DEL NÚMERO DE ALUMNOS
 
 bool C[Max_alumnos];	//ARRAY CONTENEDOR DE POSIBLES ALUMNOS
-int companero[Max_alumnos];	//ARRAYA CONTENEDOR DEL COMPAÑERO DE CADA ALUMNO
+int Companero[Max_alumnos];	//ARRAYA CONTENEDOR DEL COMPAÑERO DE CADA ALUMNO
 
 int Amistad[Max_alumnos][Max_alumnos];	//MATRIZ CONTENEDORA DE LOS VALORES DE AMISTAD 
 int Trabajo[Max_alumnos][Max_alumnos];	//MATRIZ CONTENEDORA DE LOS VALORES DE TRABAJO
@@ -46,7 +46,7 @@ void resetVariable(){
 
 	for(int i = 0; i < Max_alumnos; i++){
 		C[i] = 0;
-		companero[i] = -1;	//DISTINTO DE 0, YA QUE EL 0 REPRESENTA A UN COMPAÑERO
+		Companero[i] = -1;	//DISTINTO DE 0, YA QUE EL 0 REPRESENTA A UN COMPAÑERO
 	}
 
 	for(int i = 0; i < Max_alumnos; i++){
@@ -67,12 +67,24 @@ void setVariable(int numAlumnos){
 	for(int i = 0; i < numAlumnos; i++){
 		for(int j = 0; j < numAlumnos; j++){
 			if (j == i){
-				Amistad[i][j] = 0;
+				Amistad[i][j] = 0;			}
+			else{
+				int amistad = 0;
+				cin >> amistad;
+				Amistad[i][j] = amistad;
+			}
+
+		}
+	}
+	for(int i = 0; i < numAlumnos; i++){
+		for(int j = 0; j < numAlumnos; j++){
+			if (j == i){
+				Trabajo[i][j] = 0;
 			}
 			else{
-				int Amistad = 0;
-				cin >> Amistad;
-				Amistad[i][j] = Amistad;
+				int trabajo = 0;
+				cin >> trabajo;
+				Trabajo[i][j] = trabajo;
 			}
 
 		}
@@ -98,12 +110,12 @@ void posible(int alumno){
 	mejorCompanero = companero;
 
 	if(companero == -1){
-			companero[alumno] = -1;
+			Companero[alumno] = -1;
 	}	
 
 	else{
 
-			for(companero < numAlumnos; companero++){
+			for(;companero < numAlumnos; companero++){
 
 					if(C[companero] == true){}
 
@@ -146,7 +158,7 @@ void ImprimirSolucion(){
 
 		for(int i = 0; i < numAlumnos/2-1; i++){
 			alumno = Solucion[i].alumno;
-			companero = Solucion[i].companero
+			companero = Solucion[i].companero;
 			elegidos[alumno] = true;
             elegidos[companero] = true;
             cout << alumno << " " << companero << " ";     
