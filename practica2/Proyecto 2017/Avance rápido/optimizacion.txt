@@ -1,0 +1,21 @@
+Optimizacion
+ ---> SeleccionarAlumno
+       en cada iteracion esta escogiendo un alumno. cambia la seleccion para que empieze desde el anterior alumno seleccionado es decir
+       int seleccionar(int pos){
+            int i = pos;
+            for(; i < numAlumno-1 && C[i] == true; i++){}
+           
+        }
+ --> metodo voraz
+        declara una variable i que sera el alumno actual asi en la siguiente iteracion selecciona alumno +1
+        void voraz(){
+        int pos=0;
+                 while(alumnoSolo != 0 ){
+
+                           int alumno = seleccionar(pos);  //COGEMOS AL PRIMER ALUMNO NO SENTADO DE C
+                         ........
+
+                 }
+                 ImprimirSolucion();
+
+}
