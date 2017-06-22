@@ -5,7 +5,9 @@ using namespace std;
 
 #define MAX_ALUMNOS 100
 
-////VARIABLES GLOBALES/////
+///////////////////////////////////////////////////////////
+//////////        VARIABLES GLOBALES        ///////////////
+///////////////////////////////////////////////////////////
 
 struct pupitre{
        int alumno;
@@ -14,36 +16,38 @@ struct pupitre{
 
 pupitre Solucion[MAX_ALUMNOS/2];
 
-int alumnoSolo;   //ENTERO CONTENEDOR DE ALUMNOS NO SENTADOS
-int numAlumno;    //ENTERO CONTENEDOR DEL NÚMERO DE ALUMNOS
+int alumnosSinPupitre;   //Entero que va a contener los alumnos que todavía no han sido sentados
+int NAlumnos;            //Entero que va a contener el numero de alumnos
 
-bool C[MAX_ALUMNOS];                   //ARRAY CONTENEDOR DE POSIBLES ALUMNOS
-int Companero[MAX_ALUMNOS];            //ARRAYA CONTENEDOR DEL COMPAÑERO DE CADA ALUMNO
+bool C[MAX_ALUMNOS];                   //Array de booleanos que va a contener los alumnos candidatos(false si el alumno aun no ha sido sentado)
+int Companero[MAX_ALUMNOS];            //Array que va a contener el compañero de cada alumno(Inicializado a -1, porque 0 es un alumno)
 
-int Amistad[MAX_ALUMNOS][MAX_ALUMNOS]; // MATRIZ CONTENEDORA DE LOS VALORES DE AMISTAD
-int Trabajo[MAX_ALUMNOS][MAX_ALUMNOS]; // MATRIZ CONTENEDORA DE LOS VALORES DE TRABAJO
+int Amistad[MAX_ALUMNOS][MAX_ALUMNOS]; // Matriz que contiene los valores de amistad de los alumnos
+int Trabajo[MAX_ALUMNOS][MAX_ALUMNOS]; // Matriz que contiene los valores de trabajo de los alumnos
 
 int indiceSolucion;
 int beneficioTotal;
+///////////////////////////////////////////////////////////
+///////////       FUNCIONES DEL PROGRAMA        ///////////
+///////////////////////////////////////////////////////////
 
-///////////FUNCIONES ///////////
-
-//FUNCION INICIA VARIABLES//
+/*Funcion que va a inicializar las variables globales*/
 void resetearVariables(){
-     alumnoSolo = 0;
+     alumnosSinPupitre = 0;
      indiceSolucion = 0;
      beneficioTotal = 0;
      
-     pupitre p;
-     p.alumno = 0;
-     p.companero = 0;
+     
      for(int i = 0; i < MAX_ALUMNOS/2; i++){
-             Solucion[i] = p;
+              pupitre p;
+              p.alumno = 0;
+              p.companero = 0;
+            Solucion[i] = p;
      }
      
      for(int i = 0; i < MAX_ALUMNOS; i++){
              C[i] = 0;
-             Companero[i] = -1;    //DISTINTO DE 0, YA QUE EL 0 REPRESENTA A UN COMPAÑERO
+             Companero[i] = -1;    //No lo ponemos a 0 porque el 0 es un compañero
      }
      
      for(int i = 0; i < MAX_ALUMNOS; i++){
@@ -54,15 +58,15 @@ void resetearVariables(){
      }     
 }
 
-//METODO PARA INTRODUCIR VALORES DE LAS VARIABLES
-void setVariables(int numAlumno){
+//Metodo que va a introducir los valores de las variables(Matrices, arrays,...)
+void setVariables(int nAlumnos){
      
-     alumnoSolo = numAlumno;
+     alumnosSinPupitre = NAlumnos;
        
-     //MATRIZ AMISTAD
-     for(int i = 0; i < numAlumno; i++){
-             for(int j = 0; j < numAlumno; j++){
-                     if(j == i){          //DIAGONAL MATRIZ = 0
+     //Matriz Amistad
+     for(int i = 0; i < nAlumnos; i++){
+             for(int j = 0; j < NAlumnos; j++){
+                     if(j == i){          //La diagonal de las matrices es 0
                           Amistad[i][j] = 0;
                      }
                      else{
@@ -73,10 +77,10 @@ void setVariables(int numAlumno){
              }        
      }    
      
-     //MATRIZ TRABAJO
-     for(int i = 0; i < numAlumno; i++){
-             for(int j = 0; j < numAlumno; j++){
-                     if(j == i){          //DIAGONAL MATRIZ = 0
+     //Matriz Trabajo
+     for(int i = 0; i < nAlumnos; i++){
+             for(int j = 0; j < NAlumnos; j++){
+                     if(j == i){          //La diagonal de las matrices es 0
                           Trabajo[i][j] = 0;
                      }
                      else{
@@ -90,42 +94,42 @@ void setVariables(int numAlumno){
 }
 
 
-//FUNCIÓN SELECCIONAR, ELIGIRÁ ALUMNO NO SENTADO ENTRE LOS CANDIDATOS
-
+/*La función seleccionar se va a encargar de escoger, de entre los alumnos candidatos(C), 
+  el primer alumno que encontremos que no esté sentado*/
 int seleccionar(){
     int i = 0;
-    for(i = 0; i < numAlumno-1 && C[i] == true; i++){}
-    if(i == numAlumno-1 && C[i] == true) i = -1;      //SI NO QUEDAN COMPAÑEROS DE PIE, DEVOLVEMOS -1
+    for(i = 0; i < NAlumnos-1 && C[i] == true; i++){}
+    if(i == NAlumnos-1 && C[i] == true) i = -1;      //Si no quedan mas alumnos de pie, se devuelve -1
     return i;
 }
 
-//FUNCION POSIBLE, DEDICADA A BUSCAR COMPAÑEROS NO SENTADOS Y CALCULAR EL BENEFICIO
-
-
-void posible(int alumno){
+/* La funcion factible se va a encargar de, dado un alumno, buscar todos los compañeros que no hayan sido
+   ya sentados, y calcular el beneficio que obtendría con cada alumno. Vamos a ir modificando el compañero 
+   que asignaremos si vamos encontrando un compañero con el que se obtenga mayor beneficio.
+*/
+void factible(int alumno){
      
      int mejorCompanero;
      int beneficio = 0;
      int mayorBeneficio = 0;
      
-     int companero = seleccionar(); //COMPAÑERO CON EL QUE EMPEZAR LA BÚSQUEDA
+     int companero = seleccionar(); //Conseguimos el compañero por el que empezar a buscar
      mejorCompanero = companero;
      
-     //SI NO QUEDAN COMPAÑEROS DE PIE
+     //Si no quedan mas alumnos de pie
      if(companero == -1){
                 Companero[alumno] = -1;              
      }
      else{
          
-         for(; companero < numAlumno; companero++){  
+         for(; companero < NAlumnos; companero++){  
                        
-                 if(C[companero] == true){}
-                 
-                 else{      
+                 if(C[companero] == false){      
                           beneficio = ( Amistad[alumno][companero] + Amistad[companero][alumno] ) 
                                              * ( Trabajo[alumno][companero] + Trabajo[companero][alumno] )  ;  
                                              
-                          if(beneficio >= mayorBeneficio){       //COMPARAMOS EL BENEFICIO OBTENIDO CON EL DEL COMPAÑERO QUE YA TENÍAMOS, ACTUALIZAMOS EL BENEFICIO MÁXIMO
+                          if(beneficio >= mayorBeneficio){                //Si el beneficio que obtenemos con el compañero que estamos tratando es mayor que
+                                                                         //el beneficio que teniamos, actualizaremos el compañero y el beneficio maximo
                                        mejorCompanero = companero;
                                        mayorBeneficio = beneficio;
                           }  
@@ -133,7 +137,7 @@ void posible(int alumno){
                   
          }
          
-          C[mejorCompanero] = true; //ENCONTRADO EL MEJOR COMPAÑERO, LO SENTAMOS
+          C[mejorCompanero] = true; //Sentamos al mejor compañero que hayamos encontrado
           
           pupitre p;
           p.alumno = alumno;
@@ -142,33 +146,33 @@ void posible(int alumno){
           
           beneficioTotal += mayorBeneficio;
           
-          alumnoSolo--;
+          alumnosSinPupitre--;
          
      }
 }
 
-void ImprimirSolucion(){
+void printSolucion(){
      
-     bool escogidos[numAlumno];
+     bool escogidos[NAlumnos];
      int alumno;
      int companero;
      cout << beneficioTotal << endl;
      
-     for(int i = 0 ; i < numAlumno/2-1; i++){
+     for(int i = 0 ; i < (NAlumnos/2)-1; i++){
              alumno = Solucion[i].alumno;
              companero = Solucion[i].companero;
              escogidos[alumno] = true;
              escogidos[companero] = true;
              cout << alumno << " " << companero << " ";     
      }     
-     alumno = Solucion[numAlumno/2-1].alumno;
-     companero = Solucion[numAlumno/2-1].companero;
+     alumno = Solucion[(NAlumnos/2)-1].alumno;
+     companero = Solucion[(NAlumnos/2)-1].companero;
      escogidos[alumno] = true;
      escogidos[companero] = true;
      
      cout << alumno << " " << companero;
-     if(numAlumno%2 != 0){
-                   for(int i = 0; i < numAlumno; i++){
+     if(NAlumnos%2 != 0){
+                   for(int i = 0; i < NAlumnos; i++){
                            if(escogidos[i]!= true){
                                   cout << " " << i << endl;
                                   break;                   
@@ -180,19 +184,19 @@ void ImprimirSolucion(){
 }
 
 void voraz(){
-     while(alumnoSolo != 0 ){
+     while(alumnosSinPupitre > 0 ){
                
-               int alumno = seleccionar();  //COGEMOS AL PRIMER ALUMNO NO SENTADO DE C
+               int alumno = seleccionar();  //Se escoge, de entre C, el primer alumno que no esté sentado
                
-               C[alumno] = true;           //LO ELIMINAMOS DE LOS CANDIDATOS 
-               alumnoSolo--;
+               C[alumno] = true;           //El alumno se elimina del conjunto de candidatos  
+               alumnosSinPupitre--;
                
-               posible(alumno);           //BUSCAMOS COMPAÑERO AL ALUMNO
+               factible(alumno);           //Se busca un companero al alumno
                
                indiceSolucion++;
                   
      }
-     ImprimirSolucion();
+     printSolucion();
      
 }
 
@@ -202,8 +206,8 @@ int main(void){
     while(numeroCasos >0){
             
             resetearVariables();
-            cin >> numAlumno;
-            setVariables(numAlumno); 
+            cin >> NAlumnos;
+            setVariables(NAlumnos); 
             voraz();
 
             numeroCasos--;
