@@ -139,38 +139,56 @@ void factible(int alumno){
          
           C[mejorCompanero] = true; //Sentamos al mejor compañero que hayamos encontrado
           
-          pupitre p;
-          p.alumno = alumno;
-          p.companero = mejorCompanero;
-          Solucion[indiceSolucion] = p;
+         
           
           beneficioTotal += mayorBeneficio;
           
           alumnosSinPupitre--;
          
      }
+      pupitre p;
+      p.alumno = alumno;
+      p.companero = mejorCompanero;
+      Solucion[indiceSolucion] = p;
 }
 
 void printSolucion(){
      
-     bool escogidos[NAlumnos];
+     //bool escogidos[NAlumnos];
      int alumno;
      int companero;
      cout << beneficioTotal << endl;
-     
-     for(int i = 0 ; i < (NAlumnos/2)-1; i++){
+     int cant_empa = 0;
+
+     cant_empa = NAlumnos/2;
+
+     if(NAlumnos%2 != 0)
+     	cant_empa = cant_empa+1;
+	
+     //cout << NAlumnos << "-- > " << cant_empa << endl;
+     for(int i = 0 ; i < cant_empa; i++){
              alumno = Solucion[i].alumno;
-             companero = Solucion[i].companero;
-             escogidos[alumno] = true;
-             escogidos[companero] = true;
-             cout << alumno << " " << companero << " ";     
-     }     
-     alumno = Solucion[(NAlumnos/2)-1].alumno;
-     companero = Solucion[(NAlumnos/2)-1].companero;
-     escogidos[alumno] = true;
-     escogidos[companero] = true;
+             cout << alumno << " ";
+             if(Solucion[i].companero != -1){
+             	companero = Solucion[i].companero;
+             	cout << companero << " ";
+             }
+             //escogidos[alumno] = true;
+             //escogidos[companero] = true;
+             //cout << alumno << " " << companero << " ";     
+     }
+     /*alumno = Solucion[(NAlumnos/2)-1].alumno;
+     if(Solucion[(NAlumnos/2)-1].companero != -1){
+     	companero = Solucion[(NAlumnos/2)-1].companero;
+     	//escogidos[companero] = true;
+     	cout << alumno << " " << companero;
+     }
+     else*/
+     	//cout << alumno;
+     //escogidos[alumno] = true;
      
-     cout << alumno << " " << companero;
+     
+     /*
      if(NAlumnos%2 != 0){
                    for(int i = 0; i < NAlumnos; i++){
                            if(escogidos[i]!= true){
@@ -180,7 +198,8 @@ void printSolucion(){
                                    
                    }              
      }
-     else cout << endl;
+     else*/
+     cout << endl;
 }
 
 void voraz(){

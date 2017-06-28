@@ -1,0 +1,39 @@
+12 ---> 8
+****** nivel: 0 ---- BACT: 4
+Sol: 1 0 0 0 0 0 0 0 
+****** nivel: 1 ---- BACT: 6
+Sol: 1 6 0 0 0 0 0 0 
+****** nivel: 2 ---- BACT: 8
+Sol: 1 6 3 0 0 0 0 0 
+****** nivel: 3 ---- BACT: 12
+Sol: 1 6 3 4 0 0 0 0 
+****** nivel: 4 ---- BACT: 14
+Sol: 1 6 3 4 4 0 0 0 
+****** nivel: 5 ---- BACT: 18
+Sol: 1 6 3 4 4 2 0 0 
+****** nivel: 6 ---- BACT: 22
+Sol: 1 6 3 4 4 2 1 0 
+****** nivel: 7 ---- BACT: 27
+Sol: 1 6 3 4 4 2 1 6 
+==========> Voa: 27
+****** nivel: 7 ---- BACT: 24
+Sol: 1 6 3 4 4 2 1 5 
+****** nivel: 6 ---- BACT: 20
+Sol: 1 6 3 4 4 2 3 0 
+****** nivel: 6 ---- BACT: 20
+Sol: 1 6 3 4 4 2 5 0 
+****** nivel: 6 ---- BACT: 20
+Sol: 1 6 3 4 4 2 6 0 
+****** nivel: 5 ---- BACT: 17
+Sol: 1 6 3 4 4 3 0 0 
+****** nivel: 3 ---- BACT: 11
+Sol: 1 6 3 5 0 0 0 0 
+****** nivel: 3 ---- BACT: 10
+Sol: 1 6 3 6 0 0 0 0 
+****** nivel: 2 ---- BACT: 8
+Sol: 1 6 5 0 0 0 0 0 
+****** nivel: 0 ---- BACT: 2
+Sol: 5 0 0 0 0 0 0 0 
+****** nivel: 0 ---- BACT: 2
+Sol: 6 0 0 0 0 0 0 0 
+27

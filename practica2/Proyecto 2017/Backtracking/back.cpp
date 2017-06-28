@@ -5,52 +5,93 @@
 
 using namespace std;
 
-
-class Mecanico{
+class Trabajador{
 	private:
 		vector<int> capacidad;
+		vector<bool> visitados;
+		int max_trab;
 	public:
-
-		vector<int> getCapacidad()const {return capacidad;};
 		void addCapacidad(int cap){capacidad.push_back(cap);};
 		int getCapacidad(int pos){  return capacidad[pos];};
+		int get_maxTrab(){return max_trab;};
+		void set_maxTrab(int max){ max_trab = max;};
+		void reset_Visi(int trabajos){ 
+					visitados.assign(trabajos, false);
+		};
+		void set_Visi(int trabajo, bool valor){ visitados.at(trabajo) = valor;};
+		bool get_visit(int trabajo){ return visitados.at(trabajo);}
+		void print_capacidad(){ 
+		      vector<int>::iterator it = capacidad.begin(); 
+		      for ( ; it != capacidad.end(); ++it) 
+		            cout << *it << " ";
+		       cout << endl;
+	    }; 
+	    void print_Visitados(){ 
+		      vector<bool>::iterator it = visitados.begin(); 
+		      for ( ; it != visitados.end(); ++it) 
+		            cout << *it << " ";
+
+		      cout << endl;
+	    }; 
 };
+
 
 /*
 * Funcion que selecciona un mecanico 
 * esta seleccion depende de la capacidad y de que no este asignado anteriormente.
 */
 
-int seleccionMecanico(int averia, int pos, vector<Mecanico> mec, vector<int> asig){
-    int tam = mec.size();
-	for (int i = pos; i < tam; i++){
-		int ave = mec.at(i).getCapacidad(averia);
-    	if(ave==1)
-    		if(asig.at(i)!=1)
-				return i+1;
+int seleccionTrabajador(int nivel, vector<Trabajador> bw, vector<int> asig){
+    int tam = bw.size();
+    int bene_max = 0;
+    int trab_bene_max = 0;
+    int bene_trab = 0;
+
+	for (int i = 0; i < tam; i++){
+		//si el trabajador no ha sido asignado lo compruebo.
+		if(!bw.at(i).get_visit(nivel) ){
+			bene_trab = bw.at(i).getCapacidad(nivel);
+    		if(bene_trab != 0 )
+    			//compruebo si lo puedo asignar.
+    			if(asig.at(i) < bw.at(i).get_maxTrab()){
+    				if (bene_trab >= bene_max){
+    					bene_max = bene_trab;
+    					trab_bene_max = i+1;
+    				}
+    			}
+    	}
 	}
-    return 0;
+    return trab_bene_max;
 }
 
 /*
 * Funcion Generar
 * funcion que genera un nodo con una posible solucion.
 */
-void generar(int nivel, vector<int> &s, vector<Mecanico> mecanicos, vector<int> &asignaciones ){
-	
-		int valor, mecanico;
-		valor= s[nivel-1];
-		mecanico = seleccionMecanico(nivel-1, valor, mecanicos, asignaciones);
-		
-		//si ningun mecanico tiene la capacidad para reparar la averia.
-		if(mecanico > 0){
-			s.at(nivel-1) = mecanico;
-			asignaciones.at(mecanico-1) = 1;
-		}else
-			s.at(nivel-1) = mecanico;
-		
-		if (valor > 0 )
-			asignaciones.at(valor-1) = 0;
+bool generar(int nivel, vector<int> &s, vector<Trabajador> &bw, vector<int> &asigna, int &bact ){
+	int valor ;
+		int nw = bw.size();
+
+		valor = s[nivel];
+	    s[nivel]++;
+	    int capAnt =0;
+	    if(valor != -1){
+	    	capAnt = bw.at(valor).getCapacidad(nivel);
+	        bact -= capAnt;
+	        asigna.at(valor)--;
+	    }
+	    while((s[nivel] < nw)){
+	    	int cap = bw.at(s[nivel]).getCapacidad(nivel);
+	        if( cap > 0  && cap >= capAnt && asigna.at(s[nivel]) < bw.at(s[nivel]).get_maxTrab()){
+	            asigna.at(s[nivel])++;
+	            bact += cap;
+	            return true;
+	        }else{
+	            s[nivel]++;
+	        }
+	    }
+		return false;
+
 }
 
 /*
@@ -58,35 +99,24 @@ void generar(int nivel, vector<int> &s, vector<Mecanico> mecanicos, vector<int> 
 * se retrocede a la averia anterior para comprobar si existe
 * otra posible solucion
 */
-void retroceder(int &nivel, vector<int> &s, vector<int> &asig){
-	int valor = s[nivel-1];
-	s[nivel-1]=0;
+void retroceder(int &nivel, vector<int> &s, vector<int> &asig, vector<Trabajador> &bw,int &bact){
+	int valor = s[nivel];
+	s[nivel]=-1;
+
 	nivel--;
-	if(valor > 0)
-		asig.at(valor-1) = 0;
+	if(valor >= 0){
+		asig.at(valor)--;
+		bact -= bw.at(valor).getCapacidad(nivel+1);
+	}
 }
 
-/*
-* Funcion Valor
-* cuenta la cantidad de mecanicos asignados;
-*/
-int valor(vector<int> solucion)
-{
-	vector<int>::iterator it = solucion.begin();
-	int sol=0;
-	for ( ; it != solucion.end(); ++it){
-    	if(*it > 0 )
-			sol++;
-    }
-    return sol;
-}
 /*
 * Funcion Solucion
 * llegaremos a una solucion cuando lleguemos a la ultima averia
 */
-bool solucion(int nivel, int nivelMax ){
-	if (nivel >= nivelMax )
-		return true;
+bool solucion(int nivel, int nivelMax){
+	if (nivel == nivelMax-1)
+			return true;
 	return false;
 }
 
@@ -95,11 +125,13 @@ bool solucion(int nivel, int nivelMax ){
 * comprobamos si a partir de la siguiente averia podemos encontrar una solucion. 
 * se puede desplegar un nodo derecho
 */
-bool criterio(int averia, int averiaMax, int mec){
-	if( averia == averiaMax && mec < averiaMax)
-		return false;
+bool criterio(int nt, int ntmax, int voa, int bact, vector<int> cotaSuperior){
+	if(nt < ntmax-1){
+		if (voa < (bact + cotaSuperior[nt+1]))
+			return true;
 
-	return true;
+	}
+	return false;
 }
 
 /*
@@ -108,15 +140,9 @@ bool criterio(int averia, int averiaMax, int mec){
 * se puede desplegar un nodo derecho
 * devuelve true si podemos desplegar un nodo derecho
 */
-
-bool masHermanos(int averia, vector<int> s, vector<Mecanico> mecanicos, vector<int> asignaciones ){
-	int mecanico;
-	int valor = s[averia-1];
-	mecanico = seleccionMecanico(averia-1, valor, mecanicos, asignaciones);
-	if (mecanico != 0){
-		return true;
-	}
-	return false;
+bool masHermanos(vector<int> s, int nivel, int nw){
+    return (s[nivel] < nw-1);
+	
 }
 
 /*
@@ -128,75 +154,95 @@ bool masHermanos(int averia, vector<int> s, vector<Mecanico> mecanicos, vector<i
 *    - Número de mecanicos disponibles.
 * no devuelve nada
 */
-void backtracking(vector<Mecanico> mecanicos, int nAverias,  int nMec){
-	vector<int> S, mec_asig;
-	S.assign(nAverias, 0);
-	mec_asig.assign(nMec, 0);
+int backtracking(vector<Trabajador> bw, int nw, int nt, vector<int> cotaSuperior){
+	//cout << "****************" << endl; 
+	vector<int> S, trab_asig;
 
-	int nivelMax = nAverias;
+	S.assign(nt, -1); 
+	trab_asig.assign(nw, 0); 
+
+
 	//nivel por el que va el algoritmo.
-	int nivel=1;
-	//estas variables son la que contienen la solucion optima.
-	int voa = 0;
-	vector<int> soa;
-	soa.assign(nAverias, 0);
-	int av_asig=0;
+	int nivel=0;
+	
+	int voa = 0; //beneficio optimo
+	int bact =0; //beneficio actual
 
-	while (nivel > 0 && voa != nAverias && voa != nMec) {
-
-		generar(nivel, S, mecanicos, mec_asig);
-		av_asig = valor(S);
+	while (nivel >= 0) {
 		
-		//se comprueba si la varaible solucion es una solucion y si es mas optima que la que tenemos
-		if (solucion(nivel, nivelMax) && (av_asig > voa)){
-			voa = av_asig;
-			soa = S;
-		}
-		//comprobamos si podemos llegar a una solucion a partir del nodo actual
-		else if (criterio(nivel,nivelMax, voa)){
-			nivel++;
-		}
-		else {
+		if(generar(nivel, S, bw, trab_asig, bact)  ){
+				if (solucion(nivel, nt) && (bact > voa) ){
+					voa = bact;
+					if (cotaSuperior.at(0) == bact)
+						return bact;
+				}
+				if (criterio(nivel, nt,voa, bact, cotaSuperior))
+					nivel++;
+				else {
+					//se comprueba si existe mas hermanos.
+					while(nivel >= 0 && !masHermanos(S, nivel,nw) )
+						retroceder(nivel, S, trab_asig,bw,bact);
+					
+				}
+		}else {
 			//se comprueba si existe mas hermanos.
-			while(!masHermanos(nivel, S, mecanicos, mec_asig) && nivel > 0 )
-				retroceder(nivel, S, mec_asig);
+			S[nivel] = -1;
+            nivel--;
 		}
 	}
-	cout << voa << endl;
-	for (int i=0; i < nAverias; i++){
-		cout << soa.at(i);
-		if(i != nAverias-1)
-			cout << " ";
-	}
-	cout << endl;
+
+	return voa;
 }
 
 
-
-
 int main(int argc, char *argv[]){;
-
-	int casos, nMecanicos, nAverias;
+	//numero de casos, trabajadores y trabajos
+	int casos, nw, nt, cap;
 	cin >> casos;
 	int c=0;
 
-	cout << casos << endl;
 	while (c < casos){
-		cin >> nMecanicos;
-		cin >> nAverias;
+		cin >> nw;
+		cin >> nt;
 
-		vector<Mecanico> mecanicos;
-		int cap;
-
-		for (int i = 0; i < nMecanicos; i++) {
-			Mecanico aux;
-		 	for(int j=0; j< nAverias ; j++){
+		vector<Trabajador> trabajadores;
+		vector<int> cotas_sup;
+		cotas_sup.assign(nt, 0);
+		for (int i = 0; i < nw; i++) {
+			Trabajador aux;
+		 	for(int j=0; j< nt ; j++){
 		 		cin >> cap;
 		 		aux.addCapacidad(cap);
+		 		if( cap > cotas_sup.at(j)){
+                    cotas_sup.at(j) = cap;
+		 		}
 		 	}
-		 	mecanicos.push_back(aux);
+		 	aux.reset_Visi(nt);
+		 	trabajadores.push_back(aux);
     	}
-		backtracking(mecanicos, nAverias, nMecanicos);
+
+    	int cant, voa;
+    	//relleno la cantidad maxima de un trabajador
+    	cap = 0;
+    	for (int i = 0; i < nw; i++) {
+		 	cin >> cant;
+		 	trabajadores.at(i).set_maxTrab(cant);
+		 	cap += cant;
+    	}
+
+    	// Recalculamos la cotaSuperior para cada tarea como la suma de ella más las anteriores
+        // siendo la primera posición, la suma de todas las otras.
+        for (int j = nt-2; j >= 0; j--){
+            cotas_sup[j] += cotas_sup[j+1];
+        }
+       
+	    if(cap >= nt){
+			voa = backtracking(trabajadores, nw, nt, cotas_sup);
+			cout << voa << endl;
+	    	
+    	}else
+			cout << 0 << endl;
+
 		c++;
 
 	}
